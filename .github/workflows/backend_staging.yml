@@ -37,6 +37,7 @@ jobs:
         run: |
           kubectl apply -f k8s/configmaps.yaml -n staging
           kubectl apply -f k8s/secrets.yaml -n staging
+          kubectl apply -f k8s/rabbitmq.yaml -n staging
           kubectl apply -f k8s/product-db.yaml -n staging
           kubectl apply -f k8s/order-db.yaml -n staging
           kubectl apply -f k8s/customer-db.yaml -n staging

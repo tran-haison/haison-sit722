@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     // API endpoints for the Product, Order, and Customer services.
     // These ports are mapped from the Docker containers to the host machine in docker-compose.yml.
-    const PRODUCT_API_BASE_URL = '';
-    const ORDER_API_BASE_URL = '';
-    const CUSTOMER_API_BASE_URL = '';
+    const PRODUCT_API_IP = '_PRODUCT_API_URL_';
+    const ORDER_API_IP = '_ORDER_API_URL_';
+    const CUSTOMER_API_IP = '_CUSTOMER_API_URL_';
+
+    const PRODUCT_API_BASE_URL = `http://${PRODUCT_API_IP}:8000`;
+    const ORDER_API_BASE_URL = `http://${ORDER_API_IP}:8001`;
+    const CUSTOMER_API_BASE_URL = `http://${CUSTOMER_API_IP}:8002`;
 
     // DOM Elements
     const messageBox = document.getElementById('message-box');
@@ -50,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
             }
             const products = await response.json();
-            
+
             productListDiv.innerHTML = ''; // Clear previous content
             productsCache = {}; // Clear existing cache
 
@@ -63,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productsCache[product.product_id] = product; // Cache product details
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
-                
+
                 productCard.innerHTML = `
                     <img src="${product.image_url || 'https://placehold.co/300x200/cccccc/333333?text=No+Image'}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/300x200/cccccc/333333?text=Image+Error';" />
                     <h3>${product.name} (ID: ${product.product_id})</h3>
@@ -157,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const productId = event.target.dataset.id;
             const productName = event.target.dataset.name;
             const productPrice = parseFloat(event.target.dataset.price);
-            
+
             addToCart(productId, productName, productPrice);
         }
 
@@ -252,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
             }
             const customers = await response.json();
-            
+
             customerListDiv.innerHTML = ''; // Clear previous content
 
             if (customers.length === 0) {
@@ -392,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const placedOrder = await response.json();
             showMessage(`Order ${placedOrder.order_id} created with initial status: ${placedOrder.status}. Stock deduction pending.`, 'success');
-            
+
             cart = []; // Clear cart after successful order placement
             updateCartDisplay();
             placeOrderForm.reset(); // Clear form
@@ -414,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
             }
             const orders = await response.json();
-            
+
             orderListDiv.innerHTML = ''; // Clear previous content
 
             if (orders.length === 0) {
