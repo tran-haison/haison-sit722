@@ -1,1 +1,1 @@
-# Test Frontend CI workflow 1
+# Test Frontend CI workflow
